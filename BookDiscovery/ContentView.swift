@@ -1,61 +1,40 @@
-//
-//  ContentView.swift
-//  BookDiscovery
-//
-//  Created by Jann Aleli Zaplan on 2026-07-20.
-//
-
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @State private var selectedTab: AppTab = .home
+    @State private var selectedBook: Book?
+    @State private var accent: AccentTheme = .sage
+    @State private var displayStyle: DisplayStyle = .serif
+    @State private var gamified = true
+    @State private var fullScreenReading = true
+    @State private var cacheSize = 48.2
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+        ZStack {
+            Group {
+                switch selectedTab {
+                case .home: HomeView(gamified: gamified, openBook: { selectedBook = $0 })
+                case .search: PlaceholderView(tab: .search)
+                case .library: LibraryView(openBook: { selectedBook = $0 })
+                case .stats: PlaceholderView(tab: .stats)
+                case .settings:
+                    SettingsView(accent: $accent, displayStyle: $displayStyle, gamified: $gamified, fullScreenReading: $fullScreenReading, cacheSize: $cacheSize)
                 }
             }
-        } detail: {
-            Text("Select an item")
-        }
-    }
+            .environment(\.accentTheme, accent)
+            .environment(\.displayStyle, displayStyle)
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+            VStack {
+                Spacer()
+                MarginaliaTabBar(selection: $selectedTab)
             }
         }
+        .background((selectedTab == .settings ? Palette.settingsBackground : Palette.background).ignoresSafeArea())
+        .preferredColorScheme(.light)
+        .fullScreenCover(item: $selectedBook) { book in
+            BookDetailView(book: book)
+                .environment(\.accentTheme, accent)
+                .environment(\.displayStyle, displayStyle)
+        }
     }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
