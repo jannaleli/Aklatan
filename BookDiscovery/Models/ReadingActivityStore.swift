@@ -52,7 +52,10 @@ final class ReadingActivityStore: ObservableObject {
         progressAfter: Double?,
         date: Date = .now
     ) {
-        guard minutes > 0 else { return }
+        guard minutes > 0 else {
+            return
+        }
+
         sessions.append(
             ReadingSession(
                 id: UUID(),
@@ -66,11 +69,26 @@ final class ReadingActivityStore: ObservableObject {
     }
 
     func markFinished(_ book: Book, at date: Date = .now) {
-        guard !completions.contains(where: {
-            $0.bookID == book.id && calendar.isDate($0.completedAt, equalTo: date, toGranularity: .year)
-        }) else { return }
+        let alreadyCompletedThisYear = completions.contains {
+            $0.bookID == book.id
+                && calendar.isDate(
+                    $0.completedAt,
+                    equalTo: date,
+                    toGranularity: .year
+                )
+        }
 
-        completions.append(BookCompletion(id: UUID(), bookID: book.id, completedAt: date))
+        guard !alreadyCompletedThisYear else {
+            return
+        }
+
+        completions.append(
+            BookCompletion(
+                id: UUID(),
+                bookID: book.id,
+                completedAt: date
+            )
+        )
         persist()
     }
 
@@ -141,7 +159,11 @@ final class ReadingActivityStore: ObservableObject {
             completions: completions,
             yearlyGoals: yearlyGoals
         )
-        guard let data = try? JSONEncoder().encode(archive) else { return }
+
+        guard let data = try? JSONEncoder().encode(archive) else {
+            return
+        }
+
         defaults.set(data, forKey: storageKey)
     }
 }

@@ -11,7 +11,9 @@ struct Book: Identifiable, Hashable, Sendable {
     let color: Color
     let progress: Double
 
-    var author: String { authors.isEmpty ? "Unknown author" : authors.joined(separator: ", ") }
+    var author: String {
+        authors.isEmpty ? "Unknown author" : authors.joined(separator: ", ")
+    }
 
     init(
         id: String,
@@ -36,21 +38,72 @@ struct Book: Identifiable, Hashable, Sendable {
     }
 
     private static let placeholderColors: [Color] = [
-        Color(hex: "6F7D5E"), Color(hex: "A5583F"), Color(hex: "B07A5E"),
-        Color(hex: "6F7F8C"), Color(hex: "A98F52"), Color(hex: "7D6274")
+        Color(hex: "6F7D5E"),
+        Color(hex: "A5583F"),
+        Color(hex: "B07A5E"),
+        Color(hex: "6F7F8C"),
+        Color(hex: "A98F52"),
+        Color(hex: "7D6274")
     ]
 
     private static func stableColorIndex(for id: String) -> Int {
         id.unicodeScalars.reduce(0) { ($0 &* 31 &+ Int($1.value)) % placeholderColors.count }
     }
 
-    static let longWay = Book(id: "local/long-way", title: "Long Way to Morning", authors: ["Ada Rourke"], color: Color(hex: "6F7D5E"), progress: 0.62)
-    static let weightOfSalt = Book(id: "local/weight-of-salt", title: "The Weight of Salt", authors: ["Nora Beck"], color: Color(hex: "A5583F"), progress: 0.28)
-    static let lantern = Book(id: "local/lantern-keepers", title: "The Lantern Keepers", authors: ["Elias Vance"], color: Color(hex: "B07A5E"), progress: 0.7)
-    static let quietHarbor = Book(id: "local/quiet-harbor", title: "Quiet Harbor", authors: ["M. Okafor"], color: Color(hex: "6F7F8C"), progress: 0.81)
-    static let paperMoons = Book(id: "local/paper-moons", title: "Paper Moons", authors: ["Junia Reyes"], color: Color(hex: "A98F52"), progress: 0.44)
-    static let orchard = Book(id: "local/orchard-index", title: "The Orchard Index", authors: ["Lena Moss"], color: Color(hex: "7D6274"))
-    static let north = Book(id: "local/north-of-stillness", title: "North of Stillness", authors: ["I. Vale"], color: Color(hex: "7C7A4E"))
+    static let longWay = Book(
+        id: "local/long-way",
+        title: "Long Way to Morning",
+        authors: ["Ada Rourke"],
+        color: Color(hex: "6F7D5E"),
+        progress: 0.62
+    )
+
+    static let weightOfSalt = Book(
+        id: "local/weight-of-salt",
+        title: "The Weight of Salt",
+        authors: ["Nora Beck"],
+        color: Color(hex: "A5583F"),
+        progress: 0.28
+    )
+
+    static let lantern = Book(
+        id: "local/lantern-keepers",
+        title: "The Lantern Keepers",
+        authors: ["Elias Vance"],
+        color: Color(hex: "B07A5E"),
+        progress: 0.7
+    )
+
+    static let quietHarbor = Book(
+        id: "local/quiet-harbor",
+        title: "Quiet Harbor",
+        authors: ["M. Okafor"],
+        color: Color(hex: "6F7F8C"),
+        progress: 0.81
+    )
+
+    static let paperMoons = Book(
+        id: "local/paper-moons",
+        title: "Paper Moons",
+        authors: ["Junia Reyes"],
+        color: Color(hex: "A98F52"),
+        progress: 0.44
+    )
+
+    static let orchard = Book(
+        id: "local/orchard-index",
+        title: "The Orchard Index",
+        authors: ["Lena Moss"],
+        color: Color(hex: "7D6274")
+    )
+
+    static let north = Book(
+        id: "local/north-of-stillness",
+        title: "North of Stillness",
+        authors: ["I. Vale"],
+        color: Color(hex: "7C7A4E")
+    )
+
     static let recent = [lantern, quietHarbor, paperMoons]
     static let similar = [orchard, north, lantern]
     static let library = [longWay, weightOfSalt, quietHarbor, paperMoons]

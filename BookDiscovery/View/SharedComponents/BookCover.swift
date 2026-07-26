@@ -30,10 +30,22 @@ struct BookCover: View {
 
     private var placeholder: some View {
         VStack(alignment: .leading) {
-            DisplayText(book.title, size: width.map { $0 > 120 ? 20 : ($0 > 90 ? 16 : 14) } ?? 20).foregroundStyle(Palette.surface)
+            DisplayText(
+                book.title,
+                size: width.map { $0 > 120 ? 20 : ($0 > 90 ? 16 : 14) } ?? 20
+            )
+            .foregroundStyle(Palette.surface)
+
             Spacer()
-            Text(book.author.uppercased()).font(.system(size: 8, weight: .medium)).tracking(1).opacity(0.84)
-        }.foregroundStyle(Palette.surface).padding(width.map { $0 > 120 ? 16 : 11 } ?? 16)
-            .frame(width: width, height: height, alignment: .leading).background(book.color)
+
+            Text(book.author.uppercased())
+                .font(.system(size: 8, weight: .medium))
+                .tracking(1)
+                .opacity(0.84)
+        }
+        .foregroundStyle(Palette.surface)
+        .padding(width.map { $0 > 120 ? 16 : 11 } ?? 16)
+        .frame(width: width, height: height, alignment: .leading)
+        .background(book.color)
     }
 }

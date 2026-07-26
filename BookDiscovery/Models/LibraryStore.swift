@@ -28,17 +28,23 @@ final class LibraryStore: ObservableObject {
         let matchingRecords = records.values.filter { $0.shelves.contains(shelf) }
         return matchingRecords.sorted { lhs, rhs in
             switch sort {
-            case .recent: lhs.relevantDate(for: shelf) > rhs.relevantDate(for: shelf)
-            case .title: lhs.book.title.localizedCaseInsensitiveCompare(rhs.book.title) == .orderedAscending
-            case .author: lhs.book.author.localizedCaseInsensitiveCompare(rhs.book.author) == .orderedAscending
-            case .progress: lhs.book.progress > rhs.book.progress
+            case .recent:
+                lhs.relevantDate(for: shelf) > rhs.relevantDate(for: shelf)
+            case .title:
+                lhs.book.title.localizedCaseInsensitiveCompare(rhs.book.title) == .orderedAscending
+            case .author:
+                lhs.book.author.localizedCaseInsensitiveCompare(rhs.book.author) == .orderedAscending
+            case .progress:
+                lhs.book.progress > rhs.book.progress
             }
         }.map(\.book.domainBook)
     }
 
     func count(on shelf: Shelf) -> Int {
         records.values.reduce(into: 0) { count, record in
-            if record.shelves.contains(shelf) { count += 1 }
+            if record.shelves.contains(shelf) {
+                count += 1
+            }
         }
     }
 
@@ -51,7 +57,10 @@ final class LibraryStore: ObservableObject {
     }
 
     func resolvedBook(_ book: Book) -> Book {
-        guard let stored = records[book.id]?.book.domainBook else { return book }
+        guard let stored = records[book.id]?.book.domainBook else {
+            return book
+        }
+
         return Book(
             id: book.id,
             title: book.title,
@@ -66,10 +75,22 @@ final class LibraryStore: ObservableObject {
     }
 
     func status(of book: Book) -> ReadingStatus? {
-        guard let shelves = records[book.id]?.shelves else { return nil }
-        if shelves.contains(.finished) { return .finished }
-        if shelves.contains(.reading) { return .reading }
-        if shelves.contains(.wanted) { return .wanted }
+        guard let shelves = records[book.id]?.shelves else {
+            return nil
+        }
+
+        if shelves.contains(.finished) {
+            return .finished
+        }
+
+        if shelves.contains(.reading) {
+            return .reading
+        }
+
+        if shelves.contains(.wanted) {
+            return .wanted
+        }
+
         return nil
     }
 
@@ -86,8 +107,14 @@ final class LibraryStore: ObservableObject {
 
         if let status {
             record.shelves.insert(status.shelf)
-            if status == .reading { record.lastReadAt = .now }
-            if status == .finished { record.finishedAt = .now }
+
+            if status == .reading {
+                record.lastReadAt = .now
+            }
+
+            if status == .finished {
+                record.finishedAt = .now
+            }
         }
 
         if record.shelves.isEmpty {
@@ -129,7 +156,10 @@ final class LibraryStore: ObservableObject {
     }
 
     func remove(_ book: Book, from shelf: Shelf) {
-        guard var record = records[book.id] else { return }
+        guard var record = records[book.id] else {
+            return
+        }
+
         record.shelves.remove(shelf)
 
         if record.shelves.isEmpty {
@@ -175,7 +205,10 @@ final class LibraryStore: ObservableObject {
     }
 
     private func persist() {
-        guard let data = try? JSONEncoder().encode(records) else { return }
+        guard let data = try? JSONEncoder().encode(records) else {
+            return
+        }
+
         defaults.set(data, forKey: storageKey)
     }
 
@@ -198,8 +231,12 @@ final class LibraryStore: ObservableObject {
                     book: StoredBook(book),
                     shelves: shelves,
                     dateAdded: Date(timeIntervalSince1970: TimeInterval(index)),
-                    lastReadAt: shelves.contains(.reading) ? Date(timeIntervalSince1970: TimeInterval(index)) : nil,
-                    finishedAt: shelves.contains(.finished) ? Date(timeIntervalSince1970: TimeInterval(index)) : nil
+                    lastReadAt: shelves.contains(.reading)
+                        ? Date(timeIntervalSince1970: TimeInterval(index))
+                        : nil,
+                    finishedAt: shelves.contains(.finished)
+                        ? Date(timeIntervalSince1970: TimeInterval(index))
+                        : nil
                 )
             )
         })
@@ -227,9 +264,12 @@ private struct LibraryRecord: Codable {
 
     func relevantDate(for shelf: Shelf) -> Date {
         switch shelf {
-        case .reading: lastReadAt ?? dateAdded
-        case .finished: finishedAt ?? dateAdded
-        case .wanted, .favorites: dateAdded
+        case .reading:
+            lastReadAt ?? dateAdded
+        case .finished:
+            finishedAt ?? dateAdded
+        case .wanted, .favorites:
+            dateAdded
         }
     }
 }
