@@ -4,9 +4,8 @@ import SwiftUI
 struct BookDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accentTheme) private var theme
+    @EnvironmentObject private var library: LibraryStore
     @StateObject private var viewModel: BookDetailViewModel
-    @State private var favorite = false
-    @State private var wanted = false
     @State private var descriptionExpanded = false
 
     init(book: Book) {
@@ -31,7 +30,9 @@ struct BookDetailView: View {
             HStack {
                 CircleButton(icon: "chevron.left") { dismiss() }
                 Spacer()
-                CircleButton(icon: favorite ? "heart.fill" : "heart") { favorite.toggle() }
+                CircleButton(icon: favorite ? "heart.fill" : "heart") {
+                    library.toggle(viewModel.displayBook, on: .favorites)
+                }
             }
             .padding(.horizontal, 20)
             .padding(.top, 10)
@@ -165,7 +166,7 @@ struct BookDetailView: View {
 
     private var actionBar: some View {
         HStack(spacing: 12) {
-            Button { wanted.toggle() } label: {
+            Button { library.toggle(viewModel.displayBook, on: .wanted) } label: {
                 Label(
                     wanted ? "Added to Library" : "Want to Read",
                     systemImage: wanted ? "bookmark.fill" : "bookmark"
@@ -177,7 +178,7 @@ struct BookDetailView: View {
                 .foregroundStyle(Palette.surface)
             }
 
-            Button { favorite.toggle() } label: {
+            Button { library.toggle(viewModel.displayBook, on: .favorites) } label: {
                 Image(systemName: favorite ? "heart.fill" : "heart")
                     .font(.system(size: 20))
                     .frame(width: 52, height: 52)
@@ -195,5 +196,13 @@ struct BookDetailView: View {
     private func byline(for book: Book) -> String {
         guard let year = book.firstPublishYear else { return book.author }
         return "\(book.author) · \(year)"
+    }
+
+    private var wanted: Bool {
+        library.contains(viewModel.book, on: .wanted)
+    }
+
+    private var favorite: Bool {
+        library.contains(viewModel.book, on: .favorites)
     }
 }

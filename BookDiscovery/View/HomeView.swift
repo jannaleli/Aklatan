@@ -12,6 +12,7 @@ struct HomeView: View {
     @Environment(\.accentTheme) private var theme
     @StateObject private var viewModel = HomeViewModel()
     let gamified: Bool
+    let openSearch: () -> Void
     let openBook: (Book) -> Void
 
     var body: some View {
@@ -39,7 +40,7 @@ struct HomeView: View {
                     }
                 }
 
-                Button { } label: {
+                Button(action: openSearch) {
                     HStack(spacing: 10) {
                         Image(systemName: "magnifyingglass")
                         Text("Search books, authors…")

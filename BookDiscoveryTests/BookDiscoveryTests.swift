@@ -104,6 +104,127 @@ struct BookDiscoveryTests {
         #expect(await service.workIDs.isEmpty)
     }
 
+    @Test @MainActor
+    func searchLoadsMatchingBooks() async {
+        let book = Book(id: "/works/OL4W", title: "The Swift Book")
+        let service = BookCatalogServiceStub(results: [
+            .success(BookSearchPage(books: [book], page: 1, totalResults: 1))
+        ])
+        let viewModel = SearchViewModel(service: service)
+
+        await viewModel.search(query: "  swift  ")
+
+        #expect(viewModel.state == SearchViewModel.State.loaded)
+        #expect(viewModel.books == [book])
+        #expect(viewModel.currentQuery == "swift")
+        #expect(await service.requests == [
+            SearchRequest(query: "swift", page: 1, limit: 20)
+        ])
+    }
+
+    @Test @MainActor
+    func clearingSearchResetsResults() async {
+        let book = Book(id: "/works/OL5W", title: "Temporary Result")
+        let service = BookCatalogServiceStub(results: [
+            .success(BookSearchPage(books: [book], page: 1, totalResults: 1))
+        ])
+        let viewModel = SearchViewModel(service: service)
+
+        await viewModel.search(query: "temporary")
+        await viewModel.search(query: "   ")
+
+        #expect(viewModel.state == SearchViewModel.State.idle)
+        #expect(viewModel.books.isEmpty)
+        #expect(viewModel.currentQuery.isEmpty)
+    }
+
+    @Test @MainActor
+    func stopWordOnlySearchUsesTitleQuery() async {
+        let service = BookCatalogServiceStub(results: [
+            .success(BookSearchPage(books: [], page: 1, totalResults: 0))
+        ])
+        let viewModel = SearchViewModel(service: service)
+
+        await viewModel.search(query: "The")
+
+        #expect(viewModel.currentQuery == "The")
+        #expect(await service.requests == [
+            SearchRequest(query: "title:The", page: 1, limit: 20)
+        ])
+    }
+
+    @Test @MainActor
+    func searchLoadsNextPageAtEndOfResults() async {
+        let first = Book(id: "/works/OL6W", title: "First")
+        let second = Book(id: "/works/OL7W", title: "Second")
+        let service = BookCatalogServiceStub(results: [
+            .success(BookSearchPage(books: [first], page: 1, totalResults: 2)),
+            .success(BookSearchPage(books: [second], page: 2, totalResults: 2))
+        ])
+        let viewModel = SearchViewModel(service: service, pageSize: 1)
+
+        await viewModel.search(query: "series")
+        await viewModel.loadMoreIfNeeded(currentBook: first)
+
+        #expect(viewModel.books == [first, second])
+        #expect(viewModel.canLoadMore == false)
+        #expect(await service.requests == [
+            SearchRequest(query: "series", page: 1, limit: 1),
+            SearchRequest(query: "series", page: 2, limit: 1)
+        ])
+    }
+
+    @Test @MainActor
+    func libraryPersistsBookAndShelfMembership() throws {
+        let suiteName = "BookDiscoveryTests.Library.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let book = Book(
+            id: "/works/OL8W",
+            title: "Saved Book",
+            authors: ["Library Author"],
+            coverURL: URL(string: "https://covers.example/saved.jpg")
+        )
+
+        let library = LibraryStore(
+            defaults: defaults,
+            storageKey: "library",
+            seedWithSamples: false
+        )
+        library.add(book, to: .wanted)
+
+        let restoredLibrary = LibraryStore(
+            defaults: defaults,
+            storageKey: "library",
+            seedWithSamples: false
+        )
+
+        #expect(restoredLibrary.contains(book, on: .wanted))
+        #expect(restoredLibrary.books(on: .wanted).first?.title == "Saved Book")
+        #expect(restoredLibrary.books(on: .wanted).first?.coverURL == book.coverURL)
+    }
+
+    @Test @MainActor
+    func removingOneShelfPreservesOtherMemberships() throws {
+        let suiteName = "BookDiscoveryTests.Shelves.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let book = Book(id: "/works/OL9W", title: "Two Shelves")
+        let library = LibraryStore(
+            defaults: defaults,
+            storageKey: "library",
+            seedWithSamples: false
+        )
+
+        library.add(book, to: .wanted)
+        library.add(book, to: .favorites)
+        library.remove(book, from: .wanted)
+
+        #expect(!library.contains(book, on: .wanted))
+        #expect(library.contains(book, on: .favorites))
+        #expect(library.count(on: .favorites) == 1)
+    }
+
     private static func page(with books: [Book]) -> BookSearchPage {
         BookSearchPage(books: books, page: 1, totalResults: books.count)
     }
@@ -111,6 +232,7 @@ struct BookDiscoveryTests {
 
 private actor BookCatalogServiceStub: BookCatalogService {
     private(set) var queries: [String] = []
+    private(set) var requests: [SearchRequest] = []
     private(set) var workIDs: [String] = []
     private var results: [Result<BookSearchPage, Error>]
     private var workResults: [Result<BookWorkDetails, Error>]
@@ -125,6 +247,7 @@ private actor BookCatalogServiceStub: BookCatalogService {
 
     func searchBooks(query: String, page: Int, limit: Int) async throws -> BookSearchPage {
         queries.append(query)
+        requests.append(SearchRequest(query: query, page: page, limit: limit))
         guard !results.isEmpty else { throw TestError.missingResult }
         return try results.removeFirst().get()
     }
@@ -134,6 +257,12 @@ private actor BookCatalogServiceStub: BookCatalogService {
         guard !workResults.isEmpty else { throw TestError.missingResult }
         return try workResults.removeFirst().get()
     }
+}
+
+private struct SearchRequest: Equatable, Sendable {
+    let query: String
+    let page: Int
+    let limit: Int
 }
 
 private enum TestError: LocalizedError {
