@@ -225,6 +225,86 @@ struct BookDiscoveryTests {
         #expect(library.count(on: .favorites) == 1)
     }
 
+    @Test @MainActor
+    func readingStatusesAreMutuallyExclusiveAndPreserveFavorites() throws {
+        let suiteName = "BookDiscoveryTests.Status.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let book = Book(id: "/works/OL10W", title: "Status Book")
+        let library = LibraryStore(
+            defaults: defaults,
+            storageKey: "library",
+            seedWithSamples: false
+        )
+
+        library.setStatus(.wanted, for: book)
+        library.toggle(book, on: .favorites)
+        library.setStatus(.reading, for: book)
+
+        #expect(library.status(of: book) == .reading)
+        #expect(!library.contains(book, on: .wanted))
+        #expect(library.contains(book, on: .favorites))
+    }
+
+    @Test @MainActor
+    func resolvingSearchResultPreservesStoredProgress() throws {
+        let suiteName = "BookDiscoveryTests.Resolution.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let searchBook = Book(id: "/works/OL11W", title: "Progress Book")
+        let library = LibraryStore(
+            defaults: defaults,
+            storageKey: "library",
+            seedWithSamples: false
+        )
+
+        library.updateProgress(for: searchBook, progress: 0.55)
+        let refreshedSearchBook = Book(id: searchBook.id, title: searchBook.title)
+
+        #expect(library.resolvedBook(refreshedSearchBook).progress == 0.55)
+    }
+
+    @Test @MainActor
+    func readingActivityCalculatesMinutesDaysAndStreak() throws {
+        let suiteName = "BookDiscoveryTests.Activity.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try #require(TimeZone(secondsFromGMT: 0))
+        let today = try #require(calendar.date(from: DateComponents(year: 2026, month: 7, day: 26, hour: 12)))
+        let yesterday = try #require(calendar.date(byAdding: .day, value: -1, to: today))
+        let twoDaysAgo = try #require(calendar.date(byAdding: .day, value: -2, to: today))
+        let store = ReadingActivityStore(
+            defaults: defaults,
+            storageKey: "activity",
+            calendar: calendar
+        )
+
+        store.logSession(for: .longWay, minutes: 20, progressAfter: 0.2, date: twoDaysAgo)
+        store.logSession(for: .longWay, minutes: 30, progressAfter: 0.3, date: yesterday)
+        store.logSession(for: .longWay, minutes: 40, progressAfter: 0.4, date: today)
+
+        let start = try #require(calendar.date(byAdding: .day, value: -3, to: today))
+        let end = try #require(calendar.date(byAdding: .day, value: 1, to: today))
+        #expect(store.minutes(from: start, to: end) == 90)
+        #expect(store.activeDays(from: start, to: end) == 3)
+        #expect(store.currentStreak(asOf: today) == 3)
+    }
+
+    @Test @MainActor
+    func completionIsCountedOncePerBookAndYear() throws {
+        let suiteName = "BookDiscoveryTests.Completion.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let store = ReadingActivityStore(defaults: defaults, storageKey: "activity")
+        let date = Date.now
+
+        store.markFinished(.longWay, at: date)
+        store.markFinished(.longWay, at: date)
+
+        #expect(store.completions.count == 1)
+    }
+
     private static func page(with books: [Book]) -> BookSearchPage {
         BookSearchPage(books: books, page: 1, totalResults: books.count)
     }

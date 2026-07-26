@@ -10,6 +10,8 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.accentTheme) private var theme
+    @EnvironmentObject private var activity: ReadingActivityStore
+    @EnvironmentObject private var library: LibraryStore
     @StateObject private var viewModel = HomeViewModel()
     let gamified: Bool
     let openSearch: () -> Void
@@ -29,7 +31,7 @@ struct HomeView: View {
                     if gamified {
                         HStack(spacing: 5) {
                             Image(systemName: "flame.fill").foregroundStyle(Palette.flame)
-                            Text("12").fontWeight(.bold)
+                            Text("\(activity.currentStreak())").fontWeight(.bold)
                             Text("day streak").font(.system(size: 11, weight: .medium)).foregroundStyle(Palette.clay)
                         }
                         .font(.system(size: 14))
@@ -54,24 +56,39 @@ struct HomeView: View {
                 .buttonStyle(.plain).padding(.top, 20)
 
                 SectionTitle("Continue reading").padding(.top, 26).padding(.bottom, 12)
-                Button { openBook(Book.longWay) } label: {
+                if let book = library.mostRecentReadingBook() {
+                    Button { openBook(book) } label: {
                     HStack(spacing: 16) {
-                        BookCover(book: .longWay, width: 82, height: 123)
+                        BookCover(book: book, width: 82, height: 123)
                         VStack(alignment: .leading, spacing: 0) {
-                            DisplayText(Book.longWay.title, size: 18)
-                            Text(Book.longWay.author).font(.system(size: 13)).foregroundStyle(Palette.muted).padding(.top, 3)
-                            Text("Chapter 14 · The Crossing").font(.system(size: 12)).foregroundStyle(Palette.muted2).padding(.top, 12)
-                            ProgressBar(value: 0.62, color: theme.color).padding(.top, 8)
+                            DisplayText(book.title, size: 18)
+                            Text(book.author).font(.system(size: 13)).foregroundStyle(Palette.muted).padding(.top, 3)
+                            Text("Reading progress").font(.system(size: 12)).foregroundStyle(Palette.muted2).padding(.top, 12)
+                            ProgressBar(value: book.progress, color: theme.color).padding(.top, 8)
                             HStack {
-                                Text("62%").fontWeight(.semibold).foregroundStyle(theme.ink)
+                                Text("\(Int(book.progress * 100))%").fontWeight(.semibold).foregroundStyle(theme.ink)
                                 Spacer()
-                                Text("~4h left")
+                                Text("Log reading")
                             }
                             .font(.system(size: 11)).foregroundStyle(Palette.muted).padding(.top, 7)
                         }
                     }
                     .padding(16).cardStyle(radius: 18)
-                }.buttonStyle(.plain)
+                    }.buttonStyle(.plain)
+                } else {
+                    Button(action: openSearch) {
+                        HStack {
+                            Text("Find a book to start reading")
+                            Spacer()
+                            Image(systemName: "arrow.right")
+                        }
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(theme.ink)
+                        .padding(16)
+                        .cardStyle(radius: 14)
+                    }
+                    .buttonStyle(.plain)
+                }
 
                 SectionTitle("Browse by mood").padding(.top, 28).padding(.bottom, 12)
                 ScrollView(.horizontal, showsIndicators: false) {

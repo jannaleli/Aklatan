@@ -5,8 +5,10 @@ struct BookDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accentTheme) private var theme
     @EnvironmentObject private var library: LibraryStore
+    @EnvironmentObject private var activity: ReadingActivityStore
     @StateObject private var viewModel: BookDetailViewModel
     @State private var descriptionExpanded = false
+    @State private var showingLogReading = false
 
     init(book: Book) {
         _viewModel = StateObject(wrappedValue: BookDetailViewModel(book: book))
@@ -20,6 +22,7 @@ struct BookDetailView: View {
                 VStack(spacing: 0) {
                     hero
                     metadata
+                    logReadingButton
                     about
                 }
             }
@@ -38,6 +41,12 @@ struct BookDetailView: View {
             .padding(.top, 10)
         }
         .task { await viewModel.loadIfNeeded() }
+        .sheet(isPresented: $showingLogReading) {
+            LogReadingSheet(book: libraryBook)
+                .environment(\.accentTheme, theme)
+                .environmentObject(library)
+                .environmentObject(activity)
+        }
     }
 
     private var hero: some View {
@@ -83,6 +92,22 @@ struct BookDetailView: View {
         }
         .cardStyle(radius: 16)
         .padding(.horizontal, 24)
+    }
+
+    private var logReadingButton: some View {
+        Button {
+            showingLogReading = true
+        } label: {
+            Label("Log Reading", systemImage: "book.pages")
+                .font(.system(size: 14, weight: .semibold))
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .foregroundStyle(theme.ink)
+                .cardStyle(radius: 14)
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 24)
+        .padding(.top, 12)
     }
 
     @ViewBuilder
@@ -166,16 +191,32 @@ struct BookDetailView: View {
 
     private var actionBar: some View {
         HStack(spacing: 12) {
-            Button { library.toggle(viewModel.displayBook, on: .wanted) } label: {
+            Menu {
+                ForEach(ReadingStatus.allCases) { status in
+                    Button {
+                        library.setStatus(status, for: libraryBook)
+                    } label: {
+                        Label(status.label, systemImage: status.icon)
+                    }
+                }
+                if readingStatus != nil {
+                    Divider()
+                    Button(role: .destructive) {
+                        library.setStatus(nil, for: libraryBook)
+                    } label: {
+                        Label("Remove Reading Status", systemImage: "xmark")
+                    }
+                }
+            } label: {
                 Label(
-                    wanted ? "Added to Library" : "Want to Read",
-                    systemImage: wanted ? "bookmark.fill" : "bookmark"
+                    readingStatus?.label ?? "Add to Library",
+                    systemImage: readingStatus?.icon ?? "plus"
                 )
-                .font(.system(size: 15, weight: .semibold))
-                .frame(maxWidth: .infinity)
-                .frame(height: 52)
-                .background(theme.color, in: RoundedRectangle(cornerRadius: 14))
-                .foregroundStyle(Palette.surface)
+                    .font(.system(size: 15, weight: .semibold))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 52)
+                    .background(theme.color, in: RoundedRectangle(cornerRadius: 14))
+                    .foregroundStyle(Palette.surface)
             }
 
             Button { library.toggle(viewModel.displayBook, on: .favorites) } label: {
@@ -198,8 +239,12 @@ struct BookDetailView: View {
         return "\(book.author) · \(year)"
     }
 
-    private var wanted: Bool {
-        library.contains(viewModel.book, on: .wanted)
+    private var libraryBook: Book {
+        library.resolvedBook(viewModel.displayBook)
+    }
+
+    private var readingStatus: ReadingStatus? {
+        library.status(of: viewModel.book)
     }
 
     private var favorite: Bool {

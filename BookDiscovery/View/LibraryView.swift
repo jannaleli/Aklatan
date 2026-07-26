@@ -4,6 +4,8 @@ struct LibraryView: View {
     @Environment(\.accentTheme) private var theme
     @EnvironmentObject private var library: LibraryStore
     @State private var shelf: Shelf = .reading
+    @State private var sort: LibrarySort = .recent
+    let openSearch: () -> Void
     let openBook: (Book) -> Void
     private let columns = [GridItem(.flexible(), spacing: 18), GridItem(.flexible())]
 
@@ -24,6 +26,24 @@ struct LibraryView: View {
                         }
                     }
                 }.padding(.top, 20)
+                HStack {
+                    Text("\(books.count) books")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Palette.muted)
+                    Spacer()
+                    Menu {
+                        Picker("Sort", selection: $sort) {
+                            ForEach(LibrarySort.allCases) { option in
+                                Text(option.rawValue).tag(option)
+                            }
+                        }
+                    } label: {
+                        Label(sort.rawValue, systemImage: "arrow.up.arrow.down")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(theme.ink)
+                    }
+                }
+                .padding(.top, 18)
                 if books.isEmpty {
                     emptyShelf
                 } else {
@@ -53,7 +73,7 @@ struct LibraryView: View {
     }
 
     private var books: [Book] {
-        library.books(on: shelf)
+        library.books(on: shelf, sortedBy: sort)
     }
 
     private var emptyShelf: some View {
@@ -66,6 +86,10 @@ struct LibraryView: View {
                 .font(.system(size: 13))
                 .foregroundStyle(Palette.muted)
                 .multilineTextAlignment(.center)
+            Button("Find books") { openSearch() }
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(theme.ink)
+                .padding(.top, 4)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 80)

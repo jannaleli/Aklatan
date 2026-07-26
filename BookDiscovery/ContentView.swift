@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var library = LibraryStore()
+    @StateObject private var activity = ReadingActivityStore()
     @State private var selectedTab: AppTab = .home
     @State private var selectedBook: Book?
     @State private var accent: AccentTheme = .sage
@@ -22,8 +23,12 @@ struct ContentView: View {
                     )
                 case .search:
                     SearchView(openBook: { selectedBook = $0 })
-                case .library: LibraryView(openBook: { selectedBook = $0 })
-                case .stats: PlaceholderView(tab: .stats)
+                case .library:
+                    LibraryView(
+                        openSearch: { selectedTab = .search },
+                        openBook: { selectedBook = $0 }
+                    )
+                case .stats: StatsView()
                 case .settings:
                     SettingsView(accent: $accent, displayStyle: $displayStyle, gamified: $gamified, fullScreenReading: $fullScreenReading, cacheSize: $cacheSize)
                 }
@@ -31,6 +36,7 @@ struct ContentView: View {
             .environment(\.accentTheme, accent)
             .environment(\.displayStyle, displayStyle)
             .environmentObject(library)
+            .environmentObject(activity)
 
             VStack {
                 Spacer()
@@ -44,6 +50,7 @@ struct ContentView: View {
                 .environment(\.accentTheme, accent)
                 .environment(\.displayStyle, displayStyle)
                 .environmentObject(library)
+                .environmentObject(activity)
         }
     }
 }
