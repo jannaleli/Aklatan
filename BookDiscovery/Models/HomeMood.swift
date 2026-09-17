@@ -1,6 +1,6 @@
 import Foundation
 
-enum HomeMood: String, CaseIterable, Identifiable, Sendable {
+enum HomeMood: String, CaseIterable, Hashable, Identifiable, Sendable {
     case fiction
     case mystery
     case memoir

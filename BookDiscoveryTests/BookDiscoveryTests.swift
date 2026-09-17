@@ -175,6 +175,32 @@ struct BookDiscoveryTests {
     }
 
     @Test @MainActor
+    func discoveryLoadsSelectedMoodAndNextPage() async {
+        let first = Book(id: "/works/OL12W", title: "First Discovery Book")
+        let second = Book(id: "/works/OL13W", title: "Second Discovery Book")
+        let service = BookCatalogServiceStub(results: [
+            .success(BookSearchPage(books: [first], page: 1, totalResults: 2)),
+            .success(BookSearchPage(books: [second], page: 2, totalResults: 2))
+        ])
+        let viewModel = DiscoveryViewModel(
+            service: service,
+            selectedMood: .mystery,
+            pageSize: 1
+        )
+
+        await viewModel.loadIfNeeded()
+        await viewModel.loadMoreIfNeeded(currentBook: first)
+
+        #expect(viewModel.state == DiscoveryViewModel.State.loaded)
+        #expect(viewModel.books == [first, second])
+        #expect(viewModel.canLoadMore == false)
+        #expect(await service.requests == [
+            SearchRequest(query: "subject:mystery", page: 1, limit: 1),
+            SearchRequest(query: "subject:mystery", page: 2, limit: 1)
+        ])
+    }
+
+    @Test @MainActor
     func libraryPersistsBookAndShelfMembership() throws {
         let suiteName = "BookDiscoveryTests.Library.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suiteName))

@@ -15,6 +15,7 @@ struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
     let gamified: Bool
     let openSearch: () -> Void
+    let openDiscovery: (HomeMood) -> Void
     let openBook: (Book) -> Void
 
     var body: some View {
@@ -107,7 +108,18 @@ struct HomeView: View {
                 HStack {
                     SectionTitle("Discover")
                     Spacer()
-                    Text("See all").font(.system(size: 13, weight: .medium)).foregroundStyle(theme.ink)
+                    Button {
+                        openDiscovery(viewModel.selectedMood)
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text("See all")
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 10, weight: .semibold))
+                        }
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(theme.ink)
+                    }
+                    .buttonStyle(.plain)
                 }.padding(.top, 28).padding(.bottom, 12)
 
                 discoveryContent
@@ -121,7 +133,8 @@ struct HomeView: View {
     @ViewBuilder
     private var discoveryContent: some View {
         switch viewModel.state {
-        case .idle, .loading where viewModel.books.isEmpty:
+        case .idle where viewModel.books.isEmpty,
+             .loading where viewModel.books.isEmpty:
             HStack {
                 Spacer()
                 ProgressView("Finding books…")

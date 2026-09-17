@@ -1,8 +1,9 @@
-import Combine
 import Foundation
+import Observation
 
+@Observable
 @MainActor
-final class BookDetailViewModel: ObservableObject {
+final class BookDetailViewModel: Identifiable {
     enum State: Equatable {
         case idle
         case loading
@@ -11,10 +12,14 @@ final class BookDetailViewModel: ObservableObject {
     }
 
     let book: Book
-    @Published private(set) var details: BookWorkDetails?
-    @Published private(set) var state: State = .idle
+    private(set) var details: BookWorkDetails?
+    private(set) var state: State = .idle
 
     private let service: any BookCatalogService
+
+    var id: String {
+        book.id
+    }
 
     convenience init(book: Book) {
         self.init(book: book, service: OpenLibraryService())

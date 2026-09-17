@@ -4,14 +4,17 @@ import SwiftUI
 struct BookDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accentTheme) private var theme
+
     @EnvironmentObject private var library: LibraryStore
     @EnvironmentObject private var activity: ReadingActivityStore
-    @StateObject private var viewModel: BookDetailViewModel
+
+    @State private var viewModel: BookDetailViewModel
+
     @State private var descriptionExpanded = false
     @State private var showingLogReading = false
 
-    init(book: Book) {
-        _viewModel = StateObject(wrappedValue: BookDetailViewModel(book: book))
+    init(viewModel: BookDetailViewModel) {
+        _viewModel = State(initialValue: viewModel)
     }
 
     var body: some View {
