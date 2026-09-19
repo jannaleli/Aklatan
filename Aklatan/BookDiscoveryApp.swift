@@ -1,6 +1,6 @@
 //
 //  BookDiscoveryApp.swift
-//  BookDiscovery
+//  Aklatan
 //
 //  Created by Jann Aleli Zaplan on 2026-07-20.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct BookDiscoveryApp: App {
+struct AklatanApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

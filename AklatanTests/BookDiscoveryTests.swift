@@ -7,7 +7,7 @@
 
 import Foundation
 import Testing
-@testable import BookDiscovery
+@testable import Aklatan
 
 struct BookDiscoveryTests {
     @Test @MainActor

@@ -12,37 +12,37 @@
 			containerPortal = AB187EFD300EAF5B00B5ECFD /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = AB187F04300EAF5B00B5ECFD;
-			remoteInfo = BookDiscovery;
+			remoteInfo = Aklatan;
 		};
 		AB187F1F300EAF5D00B5ECFD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AB187EFD300EAF5B00B5ECFD /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = AB187F04300EAF5B00B5ECFD;
-			remoteInfo = BookDiscovery;
+			remoteInfo = Aklatan;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AB187F05300EAF5B00B5ECFD /* BookDiscovery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookDiscovery.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB187F14300EAF5D00B5ECFD /* BookDiscoveryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookDiscoveryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB187F1E300EAF5D00B5ECFD /* BookDiscoveryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookDiscoveryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB187F05300EAF5B00B5ECFD /* Aklatan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aklatan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB187F14300EAF5D00B5ECFD /* AklatanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AklatanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB187F1E300EAF5D00B5ECFD /* AklatanUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AklatanUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		AB187F07300EAF5B00B5ECFD /* BookDiscovery */ = {
+		AB187F07300EAF5B00B5ECFD /* Aklatan */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BookDiscovery;
+			path = Aklatan;
 			sourceTree = "<group>";
 		};
-		AB187F17300EAF5D00B5ECFD /* BookDiscoveryTests */ = {
+		AB187F17300EAF5D00B5ECFD /* AklatanTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BookDiscoveryTests;
+			path = AklatanTests;
 			sourceTree = "<group>";
 		};
-		AB187F21300EAF5D00B5ECFD /* BookDiscoveryUITests */ = {
+		AB187F21300EAF5D00B5ECFD /* AklatanUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BookDiscoveryUITests;
+			path = AklatanUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +75,9 @@
 		AB187EFC300EAF5B00B5ECFD = {
 			isa = PBXGroup;
 			children = (
-				AB187F07300EAF5B00B5ECFD /* BookDiscovery */,
-				AB187F17300EAF5D00B5ECFD /* BookDiscoveryTests */,
-				AB187F21300EAF5D00B5ECFD /* BookDiscoveryUITests */,
+				AB187F07300EAF5B00B5ECFD /* Aklatan */,
+				AB187F17300EAF5D00B5ECFD /* AklatanTests */,
+				AB187F21300EAF5D00B5ECFD /* AklatanUITests */,
 				AB187F06300EAF5B00B5ECFD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -85,9 +85,9 @@
 		AB187F06300EAF5B00B5ECFD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AB187F05300EAF5B00B5ECFD /* BookDiscovery.app */,
-				AB187F14300EAF5D00B5ECFD /* BookDiscoveryTests.xctest */,
-				AB187F1E300EAF5D00B5ECFD /* BookDiscoveryUITests.xctest */,
+				AB187F05300EAF5B00B5ECFD /* Aklatan.app */,
+				AB187F14300EAF5D00B5ECFD /* AklatanTests.xctest */,
+				AB187F1E300EAF5D00B5ECFD /* AklatanUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AB187F04300EAF5B00B5ECFD /* BookDiscovery */ = {
+		AB187F04300EAF5B00B5ECFD /* Aklatan */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AB187F28300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "BookDiscovery" */;
+			buildConfigurationList = AB187F28300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "Aklatan" */;
 			buildPhases = (
 				AB187F01300EAF5B00B5ECFD /* Sources */,
 				AB187F02300EAF5B00B5ECFD /* Frameworks */,
@@ -108,18 +108,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				AB187F07300EAF5B00B5ECFD /* BookDiscovery */,
+				AB187F07300EAF5B00B5ECFD /* Aklatan */,
 			);
-			name = BookDiscovery;
+			name = Aklatan;
 			packageProductDependencies = (
 			);
-			productName = BookDiscovery;
-			productReference = AB187F05300EAF5B00B5ECFD /* BookDiscovery.app */;
+			productName = Aklatan;
+			productReference = AB187F05300EAF5B00B5ECFD /* Aklatan.app */;
 			productType = "com.apple.product-type.application";
 		};
-		AB187F13300EAF5D00B5ECFD /* BookDiscoveryTests */ = {
+		AB187F13300EAF5D00B5ECFD /* AklatanTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AB187F2B300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "BookDiscoveryTests" */;
+			buildConfigurationList = AB187F2B300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "AklatanTests" */;
 			buildPhases = (
 				AB187F10300EAF5D00B5ECFD /* Sources */,
 				AB187F11300EAF5D00B5ECFD /* Frameworks */,
@@ -131,18 +131,18 @@
 				AB187F16300EAF5D00B5ECFD /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				AB187F17300EAF5D00B5ECFD /* BookDiscoveryTests */,
+				AB187F17300EAF5D00B5ECFD /* AklatanTests */,
 			);
-			name = BookDiscoveryTests;
+			name = AklatanTests;
 			packageProductDependencies = (
 			);
-			productName = BookDiscoveryTests;
-			productReference = AB187F14300EAF5D00B5ECFD /* BookDiscoveryTests.xctest */;
+			productName = AklatanTests;
+			productReference = AB187F14300EAF5D00B5ECFD /* AklatanTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		AB187F1D300EAF5D00B5ECFD /* BookDiscoveryUITests */ = {
+		AB187F1D300EAF5D00B5ECFD /* AklatanUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AB187F2E300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "BookDiscoveryUITests" */;
+			buildConfigurationList = AB187F2E300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "AklatanUITests" */;
 			buildPhases = (
 				AB187F1A300EAF5D00B5ECFD /* Sources */,
 				AB187F1B300EAF5D00B5ECFD /* Frameworks */,
@@ -154,13 +154,13 @@
 				AB187F20300EAF5D00B5ECFD /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				AB187F21300EAF5D00B5ECFD /* BookDiscoveryUITests */,
+				AB187F21300EAF5D00B5ECFD /* AklatanUITests */,
 			);
-			name = BookDiscoveryUITests;
+			name = AklatanUITests;
 			packageProductDependencies = (
 			);
-			productName = BookDiscoveryUITests;
-			productReference = AB187F1E300EAF5D00B5ECFD /* BookDiscoveryUITests.xctest */;
+			productName = AklatanUITests;
+			productReference = AB187F1E300EAF5D00B5ECFD /* AklatanUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AB187F00300EAF5B00B5ECFD /* Build configuration list for PBXProject "BookDiscovery" */;
+			buildConfigurationList = AB187F00300EAF5B00B5ECFD /* Build configuration list for PBXProject "Aklatan" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -200,9 +200,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AB187F04300EAF5B00B5ECFD /* BookDiscovery */,
-				AB187F13300EAF5D00B5ECFD /* BookDiscoveryTests */,
-				AB187F1D300EAF5D00B5ECFD /* BookDiscoveryUITests */,
+				AB187F04300EAF5B00B5ECFD /* Aklatan */,
+				AB187F13300EAF5D00B5ECFD /* AklatanTests */,
+				AB187F1D300EAF5D00B5ECFD /* AklatanUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +258,12 @@
 /* Begin PBXTargetDependency section */
 		AB187F16300EAF5D00B5ECFD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AB187F04300EAF5B00B5ECFD /* BookDiscovery */;
+			target = AB187F04300EAF5B00B5ECFD /* Aklatan */;
 			targetProxy = AB187F15300EAF5D00B5ECFD /* PBXContainerItemProxy */;
 		};
 		AB187F20300EAF5D00B5ECFD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AB187F04300EAF5B00B5ECFD /* BookDiscovery */;
+			target = AB187F04300EAF5B00B5ECFD /* Aklatan */;
 			targetProxy = AB187F1F300EAF5D00B5ECFD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -397,6 +397,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Aklatan;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -428,6 +429,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Aklatan;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -467,7 +469,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BookDiscovery.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BookDiscovery";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aklatan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Aklatan";
 			};
 			name = Debug;
 		};
@@ -488,7 +490,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BookDiscovery.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BookDiscovery";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Aklatan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Aklatan";
 			};
 			name = Release;
 		};
@@ -507,7 +509,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BookDiscovery;
+				TEST_TARGET_NAME = Aklatan;
 			};
 			name = Debug;
 		};
@@ -526,14 +528,14 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BookDiscovery;
+				TEST_TARGET_NAME = Aklatan;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AB187F00300EAF5B00B5ECFD /* Build configuration list for PBXProject "BookDiscovery" */ = {
+		AB187F00300EAF5B00B5ECFD /* Build configuration list for PBXProject "Aklatan" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AB187F26300EAF5D00B5ECFD /* Debug */,
@@ -542,7 +544,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AB187F28300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "BookDiscovery" */ = {
+		AB187F28300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "Aklatan" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AB187F29300EAF5D00B5ECFD /* Debug */,
@@ -551,7 +553,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AB187F2B300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "BookDiscoveryTests" */ = {
+		AB187F2B300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "AklatanTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AB187F2C300EAF5D00B5ECFD /* Debug */,
@@ -560,7 +562,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AB187F2E300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "BookDiscoveryUITests" */ = {
+		AB187F2E300EAF5D00B5ECFD /* Build configuration list for PBXNativeTarget "AklatanUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AB187F2F300EAF5D00B5ECFD /* Debug */,

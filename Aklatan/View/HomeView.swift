@@ -1,6 +1,6 @@
 //
 //  HomeView.swift
-//  BookDiscovery
+//  Aklatan
 //
 //  Created by Jann Aleli Zaplan on 2026-07-20.
 //
